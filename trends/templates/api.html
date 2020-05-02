@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF8"/> 
+    <meta name="viewport" content="width=device-width" intial-scale="1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie-edge"/>
+    <title>Line Graph for Stocks</title>
+    
+</head>
+
+<body>
+{% block content %}  
+
+    <div id="container" style= "width: 75%;">
+    <canvas id="trends-chart" data-url ="{% url 'trends_chart' %}"></canvas>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script>
+
+        $(function () {
+
+        var $trendsChart= $("#trends-chart");
+        $.ajax({
+            url: $trendsChart.data("url"),
+            success: function (data) {
+                console.log(data);
+
+                var ctx = $trendsChart[0].getContext("2d");
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Category',
+                            backgroundColor: 'red',
+                            data: data.data
+                            }]          
+                        },
+                        options: {
+                             responsive: true,
+                             legend: {
+                                 position: 'top',
+                                 },
+                                 title: {
+                                     display: true,
+                                     text: 'Trends Line Chart'
+                                     }
+                                    }
+                                });
+                            }
+                        });
+                    });
+                </script>
+{% endblock content%}
+</body>
+</html>
